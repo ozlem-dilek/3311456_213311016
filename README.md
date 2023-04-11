@@ -1,4 +1,4 @@
-# studyapp2
+# study to-do & timer app
 
 A new Flutter project.
 
