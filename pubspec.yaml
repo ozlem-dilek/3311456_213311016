@@ -35,7 +35,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   circular_countdown_timer: ^0.2.3
-  omni_datetime_picker: ^1.0.2
 
 dev_dependencies:
   flutter_test:
