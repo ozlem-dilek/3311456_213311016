@@ -32,9 +32,28 @@
   <title>studyapp2</title>
   <link rel="manifest" href="manifest.json">
 
-  <script>
-    // The value below is injected by flutter build, do not touch.
-    var serviceWorkerVersion = null;
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyDpjrexKTDvsBwkhR9AkyELpLunUNUkHHI",
+    authDomain: "studyapp-413a1.firebaseapp.com",
+    projectId: "studyapp-413a1",
+    storageBucket: "studyapp-413a1.appspot.com",
+    messagingSenderId: "27890419959",
+    appId: "1:27890419959:web:05a365ddd974f8d3036bf2",
+    measurementId: "G-X8555TK0QC"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>

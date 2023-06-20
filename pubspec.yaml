@@ -35,6 +35,18 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   circular_countdown_timer: ^0.2.3
+  google_fonts:
+  http: ^0.13.6
+  firebase:
+  firebase_core:
+  firebase_auth:
+  cloud_firestore:
+  google_sign_in:
+  table_calendar:
+  flutter_calendar_carousel:
+  image_picker:
+  flutter_svg: ^0.22.0
+  path_provider:
 
 dev_dependencies:
   flutter_test:
