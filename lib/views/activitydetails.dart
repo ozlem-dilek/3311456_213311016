@@ -22,8 +22,9 @@ class ActivityDetailsPage extends StatefulWidget {
 class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
   int elapsedTimeInSeconds = 0;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
   CountDownController _kontrol = CountDownController();
+  var elapsedTime;
+
 
   void initState() {
     super.initState();
@@ -65,7 +66,10 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
       int minutes = 0;
       int seconds = 0;
 
-      if (timeParts.length == 2) {
+      if (timeParts.length == 1) {
+        seconds = elapsedTimeInSeconds;
+      }
+      else if (timeParts.length == 2) {
         minutes = int.parse(timeParts[0]);
         seconds = int.parse(timeParts[1]);
       } else if (timeParts.length == 3) {
@@ -81,16 +85,16 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
           .doc(userId)
           .collection('activities')
           .doc(activityId)
-          .set({
+          .update({
         'elapsedTime': totalSeconds,
         'hours': hours,
         'minutes': minutes,
         'seconds': seconds,
-      }, SetOptions(merge: true));
+      });
 
-      print('Süre kaydedildi: $elapsedTimeString');
+      print('Süre güncellendi: $elapsedTimeString');
     } catch (e) {
-      print('Süre kaydedilirken hata oluştu: $e');
+      print('Süre güncellenirken hata oluştu: $e');
     }
   }
 
@@ -238,25 +242,20 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                               _kontrol.isPaused
                               ? _kontrol.resume()
                               : _kontrol.start();
-                               var elapsedTime = _kontrol.getTime();
+                              elapsedTime = _kontrol.getTime();
                               print(elapsedTime);
 
                         }, icon: Icon(Icons.play_arrow),color: Colors.blue,),
                         IconButton(onPressed: (){_kontrol.pause();
-                        var elapsedTime = _kontrol.getTime();
-                        print(elapsedTime);
-
-                        _saveElapsedTime(elapsedTime!);
-
 
                         }, icon: Icon(Icons.pause), color: Colors.blue),
                         IconButton(onPressed: (){_kontrol.restart(
                             duration: Duration(hours: widget.activity.hour!).inSeconds);
-                        var elapsedTime = _kontrol.getTime();
+                          elapsedTime = _kontrol.getTime();
                         _saveElapsedTime(elapsedTime!);
                           }, icon: Icon(Icons.restore), color: Colors.blue),
                         IconButton(onPressed: (){
-
+                          _saveElapsedTime(elapsedTime!);
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -274,7 +273,7 @@ class _ActivityDetailsPageState extends State<ActivityDetailsPage> {
                                     child: Text("yes"),
                                     onPressed: () {
                                       setState(() {
-                                        var elapsedTime = _kontrol.getTime();
+                                        elapsedTime = _kontrol.getTime();
                                         _saveElapsedTime(elapsedTime!);
                                         Navigator.of(context).push(
                                             MaterialPageRoute(

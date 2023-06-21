@@ -8,7 +8,7 @@ import '../models/activity_model.dart';
 import '../services/activity_service.dart';
 import 'activitydetails.dart';
 import 'editactivity.dart';
-import '../utils/mybottombar.dart';
+import '../services/mybottombar.dart';
 
 class Daily extends StatefulWidget {
   const Daily({Key? key}) : super(key: key);

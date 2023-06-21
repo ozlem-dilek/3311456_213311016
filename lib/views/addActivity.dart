@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_calendar_carousel/flutter_calendar_carousel.dart'
     show CalendarCarousel;
 
-import '../utils/saatSec2.dart';
+import '../services/saatSec2.dart';
 import 'daily.dart';
-import '../utils/mybottombar.dart';
+import '../services/mybottombar.dart';
 
 class addActivity extends StatefulWidget {
   const addActivity({Key? key}) : super(key: key);

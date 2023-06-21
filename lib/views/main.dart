@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:studyapp2/views/daily.dart';
+import 'package:studyapp2/views/profile.dart';
+import 'package:studyapp2/views/statics.dart';
+import 'package:studyapp2/views/welcome.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,7 +22,7 @@ class StudyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,
       ),
-      home: Daily(),
+      home: welcome(),
     );
   }
 

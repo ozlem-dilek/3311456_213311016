@@ -38,15 +38,18 @@ dependencies:
   google_fonts:
   http: ^0.13.6
   firebase:
-  firebase_core:
-  firebase_auth:
-  cloud_firestore:
+  firebase_core: ^2.13.0
+  firebase_auth: ^4.6.1
+  cloud_firestore: ^4.7.1
   google_sign_in:
   table_calendar:
   flutter_calendar_carousel:
   image_picker:
   flutter_svg: ^0.22.0
-  path_provider:
+  path_provider: ^2.0.15
+  fl_chart:
+  sqflite: 2.2.8
+  path: ^1.8.2
 
 dev_dependencies:
   flutter_test:

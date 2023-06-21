@@ -7,6 +7,7 @@ class Post {
   final String text;
   final String photoUrl;
   final DateTime timestamp;
+  final String Id;
 
   Post({
     required this.userId,
@@ -15,6 +16,7 @@ class Post {
     required this.text,
     required this.photoUrl,
     required this.timestamp,
+    required this.Id,
   });
 
   factory Post.fromDocument(DocumentSnapshot document) {
@@ -26,6 +28,7 @@ class Post {
       text: data['text'],
       photoUrl: data['photoUrl'],
       timestamp: data['timestamp'].toDate(),
+      Id: data['Id'],
     );
   }
 }

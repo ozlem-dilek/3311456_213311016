@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:studyapp2/utils/signinfunc.dart';
+import 'package:studyapp2/services/signinfunc.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);

@@ -4,7 +4,7 @@ import 'package:studyapp2/views/addActivity.dart';
 import 'package:studyapp2/views/daily.dart';
 import 'package:studyapp2/views/focusPage.dart';
 
-import '../utils/mybottombar.dart';
+import '../services/mybottombar.dart';
 
 class Pick extends StatefulWidget {
   const Pick({Key? key}) : super(key: key);

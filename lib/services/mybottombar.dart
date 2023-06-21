@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:studyapp2/views/pick.dart';
 import 'package:studyapp2/views/profile.dart';
+import 'package:studyapp2/views/user_settings.dart';
 import 'package:studyapp2/views/statics.dart';
 import '../views/daily.dart';
 import '../views/timeline.dart';
@@ -138,6 +139,7 @@ class _BottomBarState extends State<BottomBar> {
               iconSize: 30,
               color: currentPage == 3 ? Colors.pink : Color.fromRGBO(142, 159, 218, 1.0)
           ),
+
         ],
       ),
 

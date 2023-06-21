@@ -6,6 +6,17 @@ class PostService {
   final CollectionReference postsCollection =
   FirebaseFirestore.instance.collection('posts');
 
+
+  Future<void> deletePost(String documentId) async {
+    try {
+      await postsCollection.doc(documentId).delete();
+    } catch (e) {
+      print('Paylaşım silinirken hata oluştu: $e');
+      throw Exception('Paylaşım silinirken hata oluştu');
+    }
+  }
+
+
   Future<List<Post>> getAllPosts() async {
     final querySnapshot = await postsCollection.get();
     final List<Post> posts = [];
@@ -23,7 +34,9 @@ class PostService {
       'text': post.text,
       'photoUrl': post.photoUrl,
       'timestamp': post.timestamp,
+      'Id' : postsCollection.doc().id,
     });
+
   }
 
 
@@ -45,6 +58,7 @@ class PostService {
           text: data['text'] as String,
           photoUrl: data['photoUrl'] as String,
           timestamp: (data['timestamp'] as Timestamp).toDate(),
+            Id: data['Id']
         );
         userPosts.add(post);
       });

@@ -1,4 +1,3 @@
-import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,8 +8,8 @@ import 'package:studyapp2/models/post_model.dart';
 import 'package:studyapp2/services/activity_service.dart';
 import 'package:studyapp2/services/post_service.dart';
 import '../models/activity_model.dart';
-import '../utils/mybottombar.dart';
-
+import '../services/mybottombar.dart';
+import '../views/user_settings.dart';
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
 
@@ -28,16 +27,18 @@ class _ProfileState extends State<Profile> {
   TextEditingController textcontrol = TextEditingController();
   List<Post> userPosts = [];
   PostService _postService = PostService();
+  Color tileColor = Colors.white;
+  bool isTapped = true;
 
   Future<DocumentSnapshot> getUserData() async {
     String? userEmail = FirebaseAuth.instance.currentUser!.email;
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+    DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
         .collection('users')
-        .where('email', isEqualTo: userEmail)
+        .doc(userID)
         .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      return querySnapshot.docs.first;
+    if (userSnapshot.exists) {
+      return userSnapshot;
     } else {
       throw Exception("Kullanıcı bulunamadı");
     }
@@ -78,9 +79,9 @@ class _ProfileState extends State<Profile> {
         text: text!,
         photoUrl: photoUrl,
         timestamp: timestamp,
+        Id: _postService.postsCollection.doc().id
       );
       await _postService.createPost(post);
-
     }
   }
 
@@ -95,14 +96,39 @@ class _ProfileState extends State<Profile> {
       },
       child: Center(
         child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            toolbarHeight: 30,
+            backgroundColor: Colors.white,
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(onPressed: (){
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => userSettings()),
+                    );
+
+                },
+                    icon: Icon(Icons.settings),
+                    iconSize: 30,
+                    color:Color.fromRGBO(142, 159, 218, 1.0)
+                ),
+
+
+              ],
+            ),
+          ),
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
             child: SafeArea(
               child: Column(
                 children: [
                   Card(
-                    color: Color.fromRGBO(212, 229, 255, 1.0),
-                    shadowColor: Color.fromRGBO(182, 199, 225, 1.0),
+                    color: Colors.white,
+                    shadowColor: Colors.white,
                     elevation: 5,
                     child: Container(
                       height: 170,
@@ -207,35 +233,85 @@ class _ProfileState extends State<Profile> {
                     onPressed: _sharePost,
                     child: Text('Share'),
                   ),
-                  FutureBuilder<List<Post>>(
-                    future: getUserPosts(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Text('Hata: ${snapshot.error}'),
-                        );
-                      } else if (snapshot.hasData) {
-                        List<Post> userPosts = snapshot.data!;
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: userPosts.length,
-                          itemBuilder: (context, index) {
-                            Post post = userPosts[index];
-                            return ListTile(
-                              title: Text(post.text),
-                            );
-                          },
-                        );
-                      } else {
-                        return Center(
-                          child: Text('Henüz paylaşım yok'),
-                        );
-                      }
-                    },
+                  SingleChildScrollView(
+                    child: FutureBuilder<List<Post>>(
+                      future: getUserPosts(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Text('Hata: ${snapshot.error}'),
+                          );
+                        } else if (snapshot.hasData) {
+                          List<Post> userPosts = snapshot.data!;
+                          return SingleChildScrollView(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: userPosts.length,
+                              itemBuilder: (context, index) {
+                                Post post = userPosts[index];
+
+                                return Dismissible(
+                                  key: Key(post.Id),
+                                  direction: DismissDirection.endToStart,
+                                  onDismissed: (direction) async {
+                                    await _postService.deletePost(post.Id);
+                                    setState(() {
+                                      userPosts.removeAt(index);
+                                    });
+                                    getUserPosts();
+
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text("Paylaşım silindi"),
+                                      ),
+                                    );
+                                  },
+                                  child: ListTile(
+                                    tileColor: Colors.white,
+                                    leading:imagePath == null
+                                        ? Icon(Icons.account_circle_sharp, size: 40,)
+                                        : Image.file(File(imagePath!)),
+                                    title: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text('${username}',
+                                            style: TextStyle(
+                                              fontSize: 15
+                                            ),),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5,),
+                                        Text(post.text,
+                                        style: TextStyle(fontSize: 23),),
+                                      ],
+                                    ),
+                                    subtitle: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text('${post.timestamp}',
+                                        style: TextStyle(
+                                          fontSize: 10
+                                        ),),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        } else {
+                          return Center(
+                            child: Text('Henüz paylaşım yok'),
+                          );
+                        }
+                      },
+                    ),
                   ),
                 ],
               ),
